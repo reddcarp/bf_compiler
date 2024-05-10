@@ -13,7 +13,7 @@ make
 
 ## Resources
 
-- <http://www.egr.unlv.edu/~ed/assembly64.pdf> <3
+- <http://www.egr.unlv.edu/~ed/assembly64.pdf> ❤️
 - <https://www.nasm.us/doc/nasmdoc0.html?ref=conradk.com>
 - <https://p403n1x87.github.io/getting-started-with-x86-64-assembly-on-linux.html>
 - <https://markfloryan.github.io/pdr/slides/reiss/asm.pdf>
