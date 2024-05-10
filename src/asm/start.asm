@@ -8,12 +8,7 @@ extern decreaseIndex                            ; from decreaseIndex.asm
 extern increaseIndex                            ; from increaseIndex.asm
 extern printData                                ; from printData.asm
 extern readData                                 ; from readData.asm
-
-section .data
-global dataArr, dataArrMaxSize, dataIndex       ; used to export symbols to be accessed from other files
-dataArrMaxSize equ 300                          ; maximum size of dataArr
-dataArr TIMES dataArrMaxSize db 0               ; 300 element bytes array initialized to 0
-dataIndex dq 0                                  ; 64 bit integer variable
+extern dataArr, dataIndex                       ; from data.asm
 
 section .text
 global _start

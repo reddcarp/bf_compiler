@@ -3,7 +3,7 @@
 # directory to store compiled files
 mkdir -p ../../build/asm
 
-filesToCompile=('constants' 'printData' 'readData' 'decreaseIndex' 'increaseIndex' 'print' 'start')
+filesToCompile=('constants' 'printData' 'data' 'readData' 'decreaseIndex' 'increaseIndex' 'print' 'start')
 # compile all files
 for file in "${filesToCompile[@]}"
 do

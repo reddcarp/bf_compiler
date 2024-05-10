@@ -1,5 +1,5 @@
 extern STDOUT               ; from constants.asm
-extern dataArr, dataIndex   ; from start.asm
+extern dataArr, dataIndex   ; from data.asm
 extern print                ; from print.asm
 
 section .text

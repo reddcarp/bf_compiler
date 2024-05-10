@@ -1,4 +1,4 @@
-extern dataArr, dataIndex           ; from start.asm
+extern dataArr, dataIndex           ; from data.asm
 extern STDIN, STDOUT, SYS_read, LF  ; from constants.asm
 extern print                        ; from print.asm
 

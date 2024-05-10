@@ -1,6 +1,6 @@
 %include "macros.asm"
 
-extern dataIndex, dataArrMaxSize    ; from start.asm
+extern dataIndex, dataArrMaxSize    ; from data.asm
 extern EXIT_ERROR, STDERR, LF       ; from constants.asm
 extern print                        ; from print.asm
 
