@@ -26,29 +26,26 @@ set(ASM_FILEPATH
     ${CMAKE_CURRENT_SOURCE_DIR}/../../asm
 )
 
-set(ASM_HEADER_FILES
-    ${bf_compiler_GENERATED_FILES_DIR}/constants.hpp
-    ${bf_compiler_GENERATED_FILES_DIR}/data.hpp
-    ${bf_compiler_GENERATED_FILES_DIR}/decreaseIndex.hpp
-    ${bf_compiler_GENERATED_FILES_DIR}/increaseIndex.hpp
-    ${bf_compiler_GENERATED_FILES_DIR}/print.hpp
-    ${bf_compiler_GENERATED_FILES_DIR}/printData.hpp
-    ${bf_compiler_GENERATED_FILES_DIR}/readData.hpp
-)
-foreach(asm_header ${ASM_HEADER_FILES})
-    get_filename_component(asm_header_filename ${asm_header} NAME_WE)
+foreach(asm_source ${ASM_SOURCE_FILES})
+    get_filename_component(asm_source_filename ${asm_source} NAME_WE)
+    add_custom_command(
+        OUTPUT ${asm_source}
+        COMMAND xxd -i ../../asm/${asm_source_filename}.o > ${asm_source}
+        DEPENDS ../../asm/${asm_source_filename}.o
+        COMMENT "Generating .cpp for ${asm_source_filename}.o"
+    )
+
+    set(asm_header "${bf_compiler_GENERATED_FILES_DIR}/${asm_source_filename}.hpp")
     add_custom_command(
         OUTPUT ${asm_header}
-        COMMAND ${executable_name} ../../asm/${asm_header_filename}.o ${asm_header} 0
-        DEPENDS ../../asm/${asm_header_filename}.o
-        COMMENT "Generating header for ${asm_header_filename}.o"
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate_hpp.sh ${asm_header} ${asm_source_filename}
+        DEPENDS ${asm_source}
+        COMMENT "Generating .hpp for ${asm_source_filename}.cpp"
     )
+    list(APPEND ASM_SOURCE_HEADER_FILES ${asm_header})
 endforeach()
 
 # Different treatment for macros files
-set(ASM_HEADER_FILES_MACROS
-    ${bf_compiler_GENERATED_FILES_DIR}/macros.hpp
-)
 foreach(asm_macro_header ${ASM_HEADER_FILES_MACROS})
     get_filename_component(asm_macro_filename ${asm_macro_header} NAME_WE)
     add_custom_command(
@@ -59,6 +56,11 @@ foreach(asm_macro_header ${ASM_HEADER_FILES_MACROS})
     )
 endforeach()
 
+
+add_custom_target(asm_sources ALL
+DEPENDS asm_objs ${ASM_SOURCE_FILES}
+)
+
 add_custom_target(asm_headers ALL
-    DEPENDS asm_objs ${ASM_HEADER_FILES} ${ASM_HEADER_FILES_MACROS}
+    DEPENDS asm_sources ${ASM_SOURCE_HEADER_FILES} ${ASM_HEADER_FILES_MACROS}
 )

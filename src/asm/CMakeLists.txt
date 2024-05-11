@@ -31,7 +31,7 @@ foreach(asm_file ${SOURCE_FILES})
         COMMAND nasm -f elf64 -o ${CMAKE_CURRENT_BINARY_DIR}/${asm_file_name}.o ${asm_file}
         DEPENDS ${asm_file}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        COMMENT "Generating object file for ${asm_file}"
+        COMMENT "Generating .o for ${asm_file}"
     )
 endforeach()
 

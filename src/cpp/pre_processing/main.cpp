@@ -8,5 +8,6 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
+    // use xxd -i on the object files to convert them to C++ source code
     return 1;
 }

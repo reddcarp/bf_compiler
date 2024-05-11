@@ -27,6 +27,8 @@ include_directories(
 add_executable(${executable_name}
     ${bf_compiler_SRC_FILES}
     ${bf_compiler_HEADER_FILES}
+    ${ASM_SOURCE_FILES}
+    ${ASM_HEADER_FILES_MACROS}
 )
 
 # add depencies
