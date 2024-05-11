@@ -38,5 +38,5 @@ endforeach()
 
 
 add_subdirectory(src/asm)
-add_subdirectory(src/cpp/pre_processing)
-add_subdirectory(src/cpp/bf_compiler)
+add_subdirectory(src/pre_processing)
+add_subdirectory(src/bf_compiler)

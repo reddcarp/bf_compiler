@@ -1,13 +1,13 @@
 set(ASM_FILEPATH
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../asm
+    ${CMAKE_CURRENT_SOURCE_DIR}/../asm
 )
 
 foreach(asm_source ${ASM_SOURCE_FILES})
     get_filename_component(asm_source_filename ${asm_source} NAME_WE)
     add_custom_command(
         OUTPUT ${asm_source}
-        COMMAND xxd -i ../../asm/${asm_source_filename}.o > ${asm_source}
-        DEPENDS ../../asm/${asm_source_filename}.o
+        COMMAND xxd -i ../asm/${asm_source_filename}.o > ${asm_source}
+        DEPENDS ../asm/${asm_source_filename}.o
         COMMENT "Generating .cpp for ${asm_source_filename}.o"
     )
 
