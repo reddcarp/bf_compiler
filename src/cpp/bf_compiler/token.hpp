@@ -1,11 +1,11 @@
-#ifndef BF_INTERPRETER_TOKEN_HPP
-#define BF_INTERPRETER_TOKEN_HPP
+#ifndef BF_COMPILER_TOKEN_HPP
+#define BF_COMPILER_TOKEN_HPP
 
 #include <iostream>
 #include <memory>
 #include <vector>
 
-namespace bf_interpreter {
+namespace bf_compiler {
 
 // Abstract classes
 
@@ -136,6 +136,6 @@ class JmpIfNotZeroToken : public JmpToken {
 };
 // ==============================================================
 
-} // bf_interpreter
+} // bf_compiler
 
 #endif

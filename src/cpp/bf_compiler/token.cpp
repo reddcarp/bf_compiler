@@ -4,7 +4,7 @@
 
 #include "token.hpp"
 
-namespace bf_interpreter {
+namespace bf_compiler {
 
 Token::Token(char t)
 : token(t)
@@ -96,4 +96,4 @@ bool JmpIfNotZeroToken::jmpCondition(int value) {
     return value != 0;
 }
 
-} // bf_interpreter
+} // bf_compiler

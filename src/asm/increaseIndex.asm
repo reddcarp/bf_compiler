@@ -1,8 +1,8 @@
 %include "macros.asm"
 
-extern dataIndex, dataArrMaxSize    ; from data.asm
-extern EXIT_ERROR, STDERR, LF       ; from constants.asm
-extern print                        ; from print.asm
+extern dataIndex, dataArrMaxSize            ; from data.asm
+extern EXIT_ERROR, STDERR, LF               ; from constants.asm
+extern print                                ; from print.asm
 
 section .data
 error_msg db "Error: buffer overflow", LF
@@ -17,9 +17,9 @@ global increaseIndex    ; make this label available to other files
 increaseIndex:
     add [dataIndex], rdi                    ; increase dataIndex by rdi
     cmp qword [dataIndex], dataArrMaxSize   ; compare dataIndex to dataArrMaxSize
-    jge error                               ; if dataIndex >= dataArrMaxSize, jump to error
+    jge .error                              ; if dataIndex >= dataArrMaxSize, jump to error
     ret                                     ; return
-error:
+.error:
     mov rdi, error_msg                      ; load address of error_msg into rdi
     mov si, error_size                      ; load size of error_msg into si
     mov dl, STDERR                          ; load STDERR into dl

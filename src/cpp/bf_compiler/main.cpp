@@ -6,7 +6,7 @@
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        std::cout << "Usage: ./bf_interpreter <bf_filepath>" << std::endl;
+        std::cout << "Usage: ./bf_compiler <bf_filepath>" << std::endl;
         return 1;
     }
 
@@ -19,14 +19,8 @@ int main(int argc, char* argv[]) {
 
     int return_code = 0;
     try {
-        std::unique_ptr<bf_interpreter::Token> head = bf_interpreter::tokenizeStream(fs);
-        bf_interpreter::Token* token = head->next_token.get();
-
-        size_t data_index = 0;
-        std::vector<char> data(10, 0);
-        while (token != nullptr) {
-            token = token->action(data_index, data);
-        }
+        std::unique_ptr<bf_compiler::Token> head = bf_compiler::tokenizeStream(fs);
+        bf_compiler::Token* token = head->next_token.get();
     }
     catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;

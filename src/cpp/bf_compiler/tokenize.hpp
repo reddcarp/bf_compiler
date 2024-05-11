@@ -1,11 +1,11 @@
-#ifndef BF_INTERPRETER_TOKENIZE_HPP
-#define BF_INTERPRETER_TOKENIZE_HPP
+#ifndef BF_COMPILER_TOKENIZE_HPP
+#define BF_COMPILER_TOKENIZE_HPP
 
 #include <memory>
 
 #include "token.hpp"
 
-namespace bf_interpreter {
+namespace bf_compiler {
 
 /**
  * Tokenizes the input stream and returns a unique pointer to a Token object.
@@ -15,7 +15,7 @@ namespace bf_interpreter {
  */
 std::unique_ptr<Token> tokenizeStream(std::istream &stream);
 
-} // bf_interpreter
+} // bf_compiler
 
 
 #endif

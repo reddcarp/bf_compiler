@@ -3,7 +3,7 @@
 
 #include "tokenize.hpp"
 
-namespace bf_interpreter {
+namespace bf_compiler {
 
 static std::unique_ptr<Token> createAndLinkJmpTokens(std::stack<JmpIfZeroToken *> &jpm_starts) {
     auto jmp_start_token = jpm_starts.top();
@@ -80,4 +80,4 @@ std::unique_ptr<Token> tokenizeStream(std::istream &stream) {
     return head;
 }
 
-} // bf_interpreter
+} // bf_compiler

@@ -27,10 +27,10 @@ readData:
     syscall                         ; call the kernel to perform the system call
 
     cmp byte [r10], LF              ; check if the character read is a newline
-    je end                          ; if it is, end the program
+    je .end                         ; if it is, end the program
 
     sub rsp, 1                      ; allocate space for a character on the stack (it grows downwards)
-flushStdin:
+.flushStdin:
     mov rax, SYS_read               ; system call number for read
     mov rdi, STDIN                  ; file descriptor for standard input
     mov rsi, rsp                    ; buffer to read into
@@ -38,8 +38,8 @@ flushStdin:
     syscall                         ; call the kernel to perform the system call
 
     cmp byte [rsp], LF              ; check if the character read is a newline
-    jne flushStdin                  ; if not, read the next character
+    jne .flushStdin                 ; if not, read the next character
 
     add rsp, 1                      ; deallocate the space for the character on the stack (restore rsp to its original )
-end:
+.end:
     ret                             ; return to the caller (the return address is stored in the stack rsp register)

@@ -16,10 +16,10 @@ global decreaseIndex            ; make this label available to other files
 ;   rdi -> amount to decrease the index by
 decreaseIndex:
     cmp [dataIndex], rdi        ; compare dataIndex to di
-    jl  error                   ; if dataIndex < di, jump to error
+    jl  .error                  ; if dataIndex < di, jump to error
     sub [dataIndex], rdi        ; decrease dataIndex by di
     ret                         ; return
-error:
+.error:
     mov rdi, error_msg          ; load address of error_msg into rdi
     mov si, error_size          ; load size of error_msg into si
     mov dl, STDERR              ; load STDERR into dl

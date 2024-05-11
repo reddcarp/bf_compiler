@@ -1,6 +1,19 @@
 # bf_compiler
 
-A brainfck language compiler for x86_64 intel architecture, written in C++
+A brainfck language compiler for linux x86_64 intel architecture, written in C++
+
+## TODO: Structure of the compilation
+
+bash -> creates .o asm files
+bf_pre_processing -> creates .hpp asm files from .o and macros.asm (will be baked in the bf_compiler exe)
+bf_compiler gets built
+
+ONLY the files that changed get recreated
+exemple:
+    data.asm change
+        bash -> create data.o
+        bd_pre_processing -> creates data.hpp
+        bf_compiler gets re-built
 
 ## Commands
 
