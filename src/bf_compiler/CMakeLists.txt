@@ -1,4 +1,3 @@
-# Variables set
 set(executable_name bf_compiler)
 
 set(bf_compiler_SRC_DIR
@@ -20,20 +19,20 @@ set(bf_compiler_HEADER_FILES
 
 include_directories(
     ${bf_compiler_INCLUDE_DIRS}
-    ${bf_compiler_GENERATED_FILES_DIR}
+    ${asm_cpp_embedder_GENERATED_FILES_DIR}
 )
 
 # exe creation
 add_executable(${executable_name}
     ${bf_compiler_SRC_FILES}
     ${bf_compiler_HEADER_FILES}
-    ${ASM_SOURCE_FILES}
+    ${ASM_CPP_FILES}
     ${ASM_MACROS_SOURCE_FILES}
 )
 
 # add depencies
 add_dependencies(${executable_name} 
-    asm_sources
+    asm_cpp_files
 )
 
 # specify the output directory for the executable
