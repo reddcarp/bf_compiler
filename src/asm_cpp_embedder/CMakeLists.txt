@@ -22,7 +22,7 @@ foreach(asm_cpp_file ${ASM_CPP_FILES})
 endforeach()
 
 # Different treatment for macros files
-foreach(asm_macro_source ${ASM_MACROS_SOURCE_FILES})
+foreach(asm_macro_source ${ASM_MACROS_CPP_FILES})
     get_filename_component(asm_macro_filename ${asm_macro_source} NAME_WE)
     add_custom_command(
         OUTPUT ${asm_macro_source} ${asm_cpp_embedder_GENERATED_FILES_DIR}/${asm_macro_filename}.hpp
@@ -32,14 +32,14 @@ foreach(asm_macro_source ${ASM_MACROS_SOURCE_FILES})
     )
 endforeach()
 
-add_custom_target(asm_macros ALL
-    DEPENDS ${ASM_MACROS_SOURCE_FILES}
+add_custom_target(asm_macros_cpp_hpp_files ALL
+    DEPENDS ${ASM_MACROS_CPP_FILES}
 )
 
-add_custom_target(asm_headers ALL
+add_custom_target(asm_hpp_files ALL
     DEPENDS ${ASM_HPP_FILES}
 )
 
 add_custom_target(asm_cpp_files ALL
-    DEPENDS asm_objs asm_macros asm_headers ${ASM_CPP_FILES}
+    DEPENDS asm_objs asm_macros_cpp_hpp_files asm_hpp_files ${ASM_CPP_FILES}
 )

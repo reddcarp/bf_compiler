@@ -27,7 +27,7 @@ add_executable(${executable_name}
     ${bf_compiler_SRC_FILES}
     ${bf_compiler_HEADER_FILES}
     ${ASM_CPP_FILES}
-    ${ASM_MACROS_SOURCE_FILES}
+    ${ASM_MACROS_CPP_FILES}
 )
 
 # add depencies
