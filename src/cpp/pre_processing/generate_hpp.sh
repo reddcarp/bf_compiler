@@ -4,8 +4,7 @@
 header_filepath=$1
 source_filename=$2
 
-touch $header_filepath
-echo "#ifndef ASM_${source_filename}_HPP" >> "${header_filepath}"
+echo "#ifndef ASM_${source_filename}_HPP" > "${header_filepath}"
 echo "#define ASM_${source_filename}_HPP" >> "${header_filepath}"
 echo "" >> "${header_filepath}"
 echo "extern unsigned char ______asm_${source_filename}_o[];" >> "${header_filepath}"

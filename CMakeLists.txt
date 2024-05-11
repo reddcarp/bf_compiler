@@ -25,15 +25,15 @@ set(ASM_SOURCE_FILES
     ${bf_compiler_GENERATED_FILES_DIR}/printData.cpp
     ${bf_compiler_GENERATED_FILES_DIR}/readData.cpp
 )
-set(ASM_HEADER_FILES_MACROS
-    ${bf_compiler_GENERATED_FILES_DIR}/macros.hpp
+set(ASM_MACROS_SOURCE_FILES
+    ${bf_compiler_GENERATED_FILES_DIR}/macros.cpp
 )
 # generating empty files to be referenced by the compiler
 foreach(asm_source ${ASM_SOURCE_FILES})
     file(TOUCH ${asm_source})
 endforeach()
-foreach(asm_header_macros ${ASM_HEADER_FILES_MACROS})
-    file(TOUCH ${asm_header_macros})
+foreach(asm_macros_source ${ASM_MACROS_SOURCE_FILES})
+    file(TOUCH ${asm_macros_source})
 endforeach()
 
 

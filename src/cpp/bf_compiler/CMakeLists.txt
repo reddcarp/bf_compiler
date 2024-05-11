@@ -28,12 +28,12 @@ add_executable(${executable_name}
     ${bf_compiler_SRC_FILES}
     ${bf_compiler_HEADER_FILES}
     ${ASM_SOURCE_FILES}
-    ${ASM_HEADER_FILES_MACROS}
+    ${ASM_MACROS_SOURCE_FILES}
 )
 
 # add depencies
 add_dependencies(${executable_name} 
-    asm_headers
+    asm_sources
 )
 
 # specify the output directory for the executable
