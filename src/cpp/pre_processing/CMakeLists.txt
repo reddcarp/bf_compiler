@@ -26,18 +26,14 @@ set(ASM_FILEPATH
     ${CMAKE_CURRENT_SOURCE_DIR}/../../asm
 )
 
-set(ASM_HEADER_FILES_PATH
-    ${CMAKE_CURRENT_SOURCE_DIR}/../bf_compiler/asm_headers
-)
-
 set(ASM_HEADER_FILES
-    ${ASM_HEADER_FILES_PATH}/constants.hpp
-    ${ASM_HEADER_FILES_PATH}/data.hpp
-    ${ASM_HEADER_FILES_PATH}/decreaseIndex.hpp
-    ${ASM_HEADER_FILES_PATH}/increaseIndex.hpp
-    ${ASM_HEADER_FILES_PATH}/print.hpp
-    ${ASM_HEADER_FILES_PATH}/printData.hpp
-    ${ASM_HEADER_FILES_PATH}/readData.hpp
+    ${bf_compiler_GENERATED_FILES_DIR}/constants.hpp
+    ${bf_compiler_GENERATED_FILES_DIR}/data.hpp
+    ${bf_compiler_GENERATED_FILES_DIR}/decreaseIndex.hpp
+    ${bf_compiler_GENERATED_FILES_DIR}/increaseIndex.hpp
+    ${bf_compiler_GENERATED_FILES_DIR}/print.hpp
+    ${bf_compiler_GENERATED_FILES_DIR}/printData.hpp
+    ${bf_compiler_GENERATED_FILES_DIR}/readData.hpp
 )
 foreach(asm_header ${ASM_HEADER_FILES})
     get_filename_component(asm_header_filename ${asm_header} NAME_WE)
@@ -51,7 +47,7 @@ endforeach()
 
 # Different treatment for macros files
 set(ASM_HEADER_FILES_MACROS
-    ${ASM_HEADER_FILES_PATH}/macros.hpp
+    ${bf_compiler_GENERATED_FILES_DIR}/macros.hpp
 )
 foreach(asm_macro_header ${ASM_HEADER_FILES_MACROS})
     get_filename_component(asm_macro_filename ${asm_macro_header} NAME_WE)

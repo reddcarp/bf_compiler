@@ -15,6 +15,4 @@ do
 done
 
 # link all files
-# TODO: get the output name from the cpp code
-# TODO: only link the needed files
 ld -o bf build/*.o

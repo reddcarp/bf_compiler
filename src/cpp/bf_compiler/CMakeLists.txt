@@ -13,12 +13,15 @@ set(bf_compiler_SRC_FILES
     ${bf_compiler_SRC_DIR}/tokenize.cpp
 )
 
-file(GLOB_RECURSE bf_compiler_HEADER_FILES
+set(bf_compiler_HEADER_FILES
     ${bf_compiler_INCLUDE_DIRS}/token.hpp
     ${bf_compiler_INCLUDE_DIRS}/tokenize.hpp
 )
 
-include_directories(${bf_compiler_INCLUDE_DIRS})
+include_directories(
+    ${bf_compiler_INCLUDE_DIRS}
+    ${bf_compiler_GENERATED_FILES_DIR}
+)
 
 # exe creation
 add_executable(${executable_name}
