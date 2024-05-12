@@ -1,8 +1,10 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <set>
 
 #include "tokenize.hpp"
+#include "filegen.hpp"
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -19,13 +21,27 @@ int main(int argc, char* argv[]) {
 
     int return_code = 0;
     try {
-        std::unique_ptr<bf_compiler::Token> head = bf_compiler::tokenizeStream(fs);
+        std::set<std::string> externs;
+        externs.emplace("readData");
+        externs.emplace("printData");
+        std::unique_ptr<bf_compiler::Token> head = bf_compiler::tokenizeStream(fs, externs);
+
         bf_compiler::Token* token = head->next_token.get();
+        std::ofstream output = bf_compiler::createOutputFile("output.asm", externs);
+        while (token != nullptr) {
+            token = token->addSegment(output);
+        }
+        output << "exit EXIT_SUCCESS";
+        output.close();
+
+        bf_compiler::createExecutable("output");
     }
     catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return_code = 1;
     }
+
+    // use -s for link to omit all symbols (makes the binary smaller)
 
     fs.close();
     return return_code;

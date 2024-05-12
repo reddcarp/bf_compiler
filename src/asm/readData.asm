@@ -40,6 +40,6 @@ readData:
     cmp byte [rsp], LF              ; check if the character read is a newline
     jne .flushStdin                 ; if not, read the next character
 
-    add rsp, 1                      ; deallocate the space for the character on the stack (restore rsp to its original )
+    add rsp, 1                      ; deallocate the space for the character on the stack (restore rsp to its original state)
 .end:
     ret                             ; return to the caller (the return address is stored in the stack rsp register)

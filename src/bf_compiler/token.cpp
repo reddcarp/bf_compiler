@@ -10,90 +10,88 @@ Token::Token(char t)
 : token(t)
 {}
 
-StartToken::StartToken() : Token(' ') {}
-Token* StartToken::action(size_t &data_index, std::vector<char> &data) {
+StartToken::StartToken() : Token(' ') { }
+Token* StartToken::addSegment(std::ostream &os) {
     return next_token.get();
 }
 
-IncrementIndexToken::IncrementIndexToken() : Token('>') {}
-Token* IncrementIndexToken::action(size_t &data_index, std::vector<char> &data) {
-    data_index += repeated;
-    size_t data_size = data.size();
-
-    // expending vector if it is too small
-    for (size_t i = data_index; i > data_size; i--) {
-        data.emplace_back(0);
-    }
-    return next_token.get();
+IncrementIndexToken::IncrementIndexToken(std::set<std::string> &externs) : Token('>') {
+    externs.emplace("increaseIndex");
 }
-
-DecrementIndexToken::DecrementIndexToken() : Token('<') {}
-Token* DecrementIndexToken::action(size_t &data_index, std::vector<char> &data) {
-    if (data_index < repeated) {
-        throw std::underflow_error("Error: Trying to access index < 0");
-    }
-
-    data_index -= repeated;
-    return next_token.get();
-}
-
-IncrementDataToken::IncrementDataToken() : Token('+') {}
-Token* IncrementDataToken::action(size_t &data_index, std::vector<char> &data) {
-    data[data_index] += repeated;
-    return next_token.get();
-}
-
-DecrementDataToken::DecrementDataToken() : Token('-') {}
-Token* DecrementDataToken::action(size_t &data_index, std::vector<char> &data) {
-    data[data_index] -= repeated;
-    return next_token.get();
-}
-
-OutputDataToken::OutputDataToken() : Token('.') {}
-Token* OutputDataToken::action(size_t &data_index, std::vector<char> &data) {
-    for (size_t i = 0; i < repeated; i++) {
-        std::cout << data[data_index];
-    }
+Token* IncrementIndexToken::addSegment(std::ostream &os) {
+    os << "mov rdi, " << repeated << "\n";
+    os << "call increaseIndex" << "\n";
 
     return next_token.get();
 }
 
-InputDataToken::InputDataToken() : Token(',') {}
-Token* InputDataToken::action(size_t &data_index, std::vector<char> &data) {
-    std::cout << "Enter a character: ";
+DecrementIndexToken::DecrementIndexToken(std::set<std::string> &externs) : Token('<') {
+    externs.emplace("decreaseIndex");
+}
+Token* DecrementIndexToken::addSegment(std::ostream &os) {
+    os << "mov rdi, " << repeated << "\n";
+    os << "call decreaseIndex" << "\n";
 
-    int input = std::getchar();
-    if (input == EOF) {
-        throw std::invalid_argument("Error: EOF reached while trying to get input");
-    }
+    return next_token.get();
+}
 
-    data[data_index] = static_cast<char>(input);
+IncrementDataToken::IncrementDataToken(std::set<std::string> &externs) : Token('+') {
+    externs.emplace("dataArr");
+    externs.emplace("dataIndex");
+}
+Token* IncrementDataToken::addSegment(std::ostream &os) {
+    os << "addToData " << repeated << "\n";
 
-    // discarding the rest of the input if the user entered more than one character
-    if (input != '\n') {
-        int trash;
-        while ((trash = std::getchar()) != '\n' && trash != EOF);
+    return next_token.get();
+}
+
+DecrementDataToken::DecrementDataToken(std::set<std::string> &externs) : Token('-') {
+    externs.emplace("dataArr");
+    externs.emplace("dataIndex");
+}
+Token* DecrementDataToken::addSegment(std::ostream &os) {
+    os << "subFromData " << repeated << "\n";
+
+    return next_token.get();
+}
+
+OutputDataToken::OutputDataToken(std::set<std::string> &externs) : Token('.') {
+    externs.emplace("printData");
+}
+Token* OutputDataToken::addSegment(std::ostream &os) {
+    for (int i = 0; i < repeated; i++) {
+        os << "call printData" << "\n";
     }
 
     return next_token.get();
 }
 
-JmpToken::JmpToken(char t) : Token(t) {}
-Token* JmpToken::action(size_t &data_index, std::vector<char> &data) {
-    if (jmpCondition(data[data_index])) {
-        return jmp_to->next_token.get();
-    }
+InputDataToken::InputDataToken(std::set<std::string> &externs) : Token(',') {
+    externs.emplace("readData");
+}
+Token* InputDataToken::addSegment(std::ostream &os) {
+    os << "call readData" << "\n";
+
     return next_token.get();
 }
 
-JmpIfZeroToken::JmpIfZeroToken() : JmpToken('[') {}
-bool JmpIfZeroToken::jmpCondition(int value) {
-    return value == 0;
+JmpIfZeroToken::JmpIfZeroToken(std::set<std::string> &externs) : Token('[') {
+    externs.emplace("dataArr");
+    externs.emplace("dataIndex");
+}
+Token* JmpIfZeroToken::addSegment(std::ostream &os) {
+    os << "jmpIfDataZero " << jmpToLabel << "\n";
+    os << jmpLabel << ":\n";
+
+    return next_token.get();
 }
 
-JmpIfNotZeroToken::JmpIfNotZeroToken() : JmpToken(']') {}
-bool JmpIfNotZeroToken::jmpCondition(int value) {
-    return value != 0;
+JmpIfNotZeroToken::JmpIfNotZeroToken() : Token(']') {}
+Token* JmpIfNotZeroToken::addSegment(std::ostream &os) {
+    os << "jmpIfDataNotZero " << jmpToLabel << "\n";
+    os << jmpLabel << ":\n";
+
+    return next_token.get();
 }
 
 } // bf_compiler
