@@ -7,8 +7,8 @@
 #include "filegen.hpp"
 
 int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cout << "Usage: ./bf_compiler <bf_filepath>" << std::endl;
+    if (argc < 3) {
+        std::cout << "Usage: ./bf_compiler <bf_filepath> <output_filename>" << std::endl;
         return 1;
     }
 
@@ -19,6 +19,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    std::string output_filename = argv[2];
+
     int return_code = 0;
     try {
         std::set<std::string> externs;
@@ -27,14 +29,14 @@ int main(int argc, char* argv[]) {
         std::unique_ptr<bf_compiler::Token> head = bf_compiler::tokenizeStream(fs, externs);
 
         bf_compiler::Token* token = head->next_token.get();
-        std::ofstream output = bf_compiler::createOutputFile("output.asm", externs);
+        std::ofstream output = bf_compiler::createOutputFile(output_filename, externs);
         while (token != nullptr) {
             token = token->addSegment(output);
         }
         output << "exit EXIT_SUCCESS";
         output.close();
 
-        bf_compiler::createExecutable("output");
+        bf_compiler::createExecutable(output_filename);
     }
     catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;

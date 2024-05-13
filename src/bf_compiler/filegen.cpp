@@ -15,17 +15,17 @@ namespace bf_compiler {
 
 std::vector<std::string> asmObjects;
 
-void deleteFiles(const std::string &folder, const std::string &filename) {
-    std::string command = "rm -f " + folder + filename + ".o " + folder + filename + ".asm ";
+void deleteFiles(const std::string &filename) {
+    std::string command = "rm -f " + filename + ".o "  + filename + ".asm ";
     for (const std::string &asmObject : asmObjects) {
-        command += folder + asmObject + ".o ";
+        command +=  asmObject + ".o ";
     }
     if (std::system(command.c_str()) != 0) {
-        throw std::runtime_error("Error: failed to delete files in '" + folder + "'");
+        throw std::runtime_error("Error: failed to delete files");
     }
 }
 
-void recreateAsmObjectFiles(const std::string &folder) {
+void recreateAsmObjectFiles() {
     std::ofstream decreaseIndex("decreaseIndex.o", std::ios::binary);
     decreaseIndex.write(reinterpret_cast<char*>(___asm_decreaseIndex_o), ___asm_decreaseIndex_o_len);
 
@@ -50,7 +50,7 @@ void recreateAsmObjectFiles(const std::string &folder) {
     asmObjects = {"decreaseIndex", "increaseIndex", "constants", "data", "print", "printData", "readData"};
 }
 
-void createMacroFile(const std::string &folder) {
+void createMacroFile() {
     std::ofstream output("macros.asm");
     if (!output.is_open()) {
         throw std::runtime_error("Error: failed to open 'macros.asm'");
@@ -59,17 +59,17 @@ void createMacroFile(const std::string &folder) {
     output  << macros_asm;
 }
 
-void deleteMacroFile(const std::string &folder) {
-    std::string command = "rm -f " + folder + "macros.asm";
+void deleteMacroFile() {
+    std::string command = "rm -f macros.asm";
     if (std::system(command.c_str()) != 0) {
         throw std::runtime_error("Error: failed to delete 'macros.asm'");
     }
 }
 
 std::ofstream createOutputFile(const std::string &filename, const std::set<std::string> &externs) {
-    std::ofstream output(filename);
+    std::ofstream output(filename + ".asm");
     if (!output.is_open()) {
-        throw std::runtime_error("Error: failed to open '" + filename + "'");
+        throw std::runtime_error("Error: failed to open '" + filename + ".asm'");
     }
 
     // Template for the start of the assembly file
@@ -86,14 +86,14 @@ std::ofstream createOutputFile(const std::string &filename, const std::set<std::
 }
 
 void createExecutable(const std::string &filename) {
-    createMacroFile("./");
+    createMacroFile();
     std::string command = "nasm -f elf64 " + filename + ".asm -o " + filename + ".o";
     if (std::system(command.c_str()) != 0) {
-        throw std::runtime_error("Error: failed to assemble '" + filename + "'");
+        throw std::runtime_error("Error: failed to assemble '" + filename + ".asm'");
     }
-    deleteMacroFile("./");
+    deleteMacroFile();
 
-    recreateAsmObjectFiles("./");
+    recreateAsmObjectFiles();
 
     command = "ld -s -o " + filename + " " + filename + ".o";
 
@@ -105,7 +105,7 @@ void createExecutable(const std::string &filename) {
         throw std::runtime_error("Error: failed to link '" + filename + "'");
     }
 
-    deleteFiles("./", filename);
+    deleteFiles(filename);
 }
 
 } // bf_compiler
