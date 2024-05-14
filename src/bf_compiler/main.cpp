@@ -90,6 +90,7 @@ int main(int argc, char* argv[]) {
                 break;
         }
     }
+    fs.close();
     start_asm << "exit EXIT_SUCCESS\n";
     start_asm.close();
 

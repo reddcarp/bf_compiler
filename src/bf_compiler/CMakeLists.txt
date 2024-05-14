@@ -37,34 +37,3 @@ add_dependencies(${executable_name}
 set_target_properties(${executable_name} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/
 )
-
-# Custom target for tests
-# add_custom_target(run_tests COMMAND ctest --output-on-failure)
-# add_dependencies(run_tests ${executable_name})
-
-# # Tests
-# enable_testing()
-
-# add_test(NAME helloWorldTest
-#     COMMAND ${CMAKE_SOURCE_DIR}/test/helloWorldTest.sh
-# )
-
-# add_test(NAME memoryLeakTest
-#     COMMAND ${CMAKE_SOURCE_DIR}/test/memoryLeakTest.sh
-# )
-
-# add_test(NAME userInputTest
-#     COMMAND ${CMAKE_SOURCE_DIR}/test/userInputTest.sh
-# )
-
-# add_test(NAME errorNoMatchingEndBracket
-#     COMMAND ${CMAKE_SOURCE_DIR}/test/errorNoMatchingEndBracket.sh
-# )
-
-# add_test(NAME errorNoMatchingStartBracket
-#     COMMAND ${CMAKE_SOURCE_DIR}/test/errorNoMatchingStartBracket.sh
-# )
-
-# add_test(NAME errorDataPointerOutOfBound
-#     COMMAND ${CMAKE_SOURCE_DIR}/test/errorDataPointerOutOfBound.sh
-# )
