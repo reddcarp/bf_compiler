@@ -1,46 +1,55 @@
 # bf_compiler
 
-A brainfck language compiler for linux x86_64 intel architecture, written in C++
+A [brainfck](https://en.wikipedia.org/wiki/Brainfuck) language compiler for linux x86_64 intel architecture, written in C++.
 
-## requirements
+## Compilation
 
-- xxd
-- nasm
+requirements:
 
-## TODO: Structure of the compilation
-
-bash -> creates .o asm files
-bf_pre_processing -> creates .cpp asm files from .o (will be baked in the bf_compiler exe)
-bf_pre_processing -> creates .hpp asm files from .cpp (will be baked in the bf_compiler exe)
-bf_pre_processing -> creates .cpp asm files from macros.asm specific treatment to separate the macros)
-bf_pre_processing -> creates .hpp asm files from macros.cpp specific treatment to separate the macros)
-bf_compiler gets built
-
-ONLY the files that changed get recreated
-exemple:
-    data.asm change
-        bash -> create data.o
-        bd_pre_processing -> creates data.cpp
-        bd_pre_processing -> creates data.hpp
-        bf_compiler gets re-built
-
-    macros.asm change
-        pre_processing -> creates macros.cpp
-        pre_processing -> creates macros.hpp
-        bf_compiler gets re-built
-
-## Commands
+- xxd package
+- nasm package
 
 ```bash
-make -p build/
-cd build/
-cmake ../
+mkdir build
+cd build
+cmake ..
 make
 ```
 
-## TEsts
+## Usage
 
-manual -> able to use build.sh to create a custom start and test out the .asm files on their own
+```bash
+./bf_compiler <bf_filepath> <output_filename>
+```
+
+## Example
+
+```bash
+./bf_compiler ../bf_scripts/hello_world.bf out
+./out
+```
+
+## Tests
+
+### Automatic validation tests
+
+Requirements:
+
+- shunit2 package
+- valgrind package
+
+Run all tests:
+
+```bash
+make run_tests
+```
+
+### Manual asm test
+
+In src/asm, change the content of the start.asm file and run ./build.sh.
+It will create the executable without symbol stripping. Perfect to try the behavior of the base asm code and understand it more.
+
+ps: all the lines of asm code are commented and explaining their purpose.
 
 ## Resources
 
