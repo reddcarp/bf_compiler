@@ -1,4 +1,4 @@
-#include<map>
+#include <iostream>
 #include <vector>
 
 #include "filegen.hpp"
@@ -13,99 +13,103 @@
 
 namespace bf_compiler {
 
-std::vector<std::string> asmObjects;
+static const std::vector<std::string> asmObjects = {"decreaseIndex", "increaseIndex", "constants", "data", "print", "printData", "readData"};
 
-void deleteFiles(const std::string &filename) {
-    std::string command = "rm -f " + filename + ".o "  + filename + ".asm ";
+int deleteFiles() {
+    std::string command = "rm -f start.o start.asm ";
     for (const std::string &asmObject : asmObjects) {
         command +=  asmObject + ".o ";
     }
     if (std::system(command.c_str()) != 0) {
-        throw std::runtime_error("Error: failed to delete files");
+        std::cerr << "Warning: failed to delete object files" << std::endl;
+        return 1;
     }
+
+    return 0;
+}
+
+void recreateAsmObjFile(const std::string &filename, const char *data, unsigned int len) {
+    std::ofstream output(filename, std::ios::binary);
+    if (!output.is_open()) {
+        throw std::ios_base::failure("Error: failed to create '" + filename + "'");
+    }
+    output.write(data, len);
 }
 
 void recreateAsmObjectFiles() {
-    std::ofstream decreaseIndex("decreaseIndex.o", std::ios::binary);
-    decreaseIndex.write(reinterpret_cast<char*>(___asm_decreaseIndex_o), ___asm_decreaseIndex_o_len);
-
-    std::ofstream increaseIndex("increaseIndex.o", std::ios::binary);
-    increaseIndex.write(reinterpret_cast<char*>(___asm_increaseIndex_o), ___asm_increaseIndex_o_len);
-
-    std::ofstream constants("constants.o", std::ios::binary);
-    constants.write(reinterpret_cast<char*>(___asm_constants_o), ___asm_constants_o_len);
-
-    std::ofstream data("data.o", std::ios::binary);
-    data.write(reinterpret_cast<char*>(___asm_data_o), ___asm_data_o_len);
-
-    std::ofstream print("print.o", std::ios::binary);
-    print.write(reinterpret_cast<char*>(___asm_print_o), ___asm_print_o_len);
-
-    std::ofstream printData("printData.o", std::ios::binary);
-    printData.write(reinterpret_cast<char*>(___asm_printData_o), ___asm_printData_o_len);
-
-    std::ofstream readData("readData.o", std::ios::binary);
-    readData.write(reinterpret_cast<char*>(___asm_readData_o), ___asm_readData_o_len);
-
-    asmObjects = {"decreaseIndex", "increaseIndex", "constants", "data", "print", "printData", "readData"};
+    recreateAsmObjFile("decreaseIndex.o", reinterpret_cast<char*>(___asm_decreaseIndex_o), ___asm_decreaseIndex_o_len);
+    recreateAsmObjFile("increaseIndex.o", reinterpret_cast<char*>(___asm_increaseIndex_o), ___asm_increaseIndex_o_len);
+    recreateAsmObjFile("constants.o", reinterpret_cast<char*>(___asm_constants_o), ___asm_constants_o_len);
+    recreateAsmObjFile("data.o", reinterpret_cast<char*>(___asm_data_o), ___asm_data_o_len);
+    recreateAsmObjFile("print.o", reinterpret_cast<char*>(___asm_print_o), ___asm_print_o_len);
+    recreateAsmObjFile("printData.o", reinterpret_cast<char*>(___asm_printData_o), ___asm_printData_o_len);
+    recreateAsmObjFile("readData.o", reinterpret_cast<char*>(___asm_readData_o), ___asm_readData_o_len);
 }
 
 void createMacroFile() {
     std::ofstream output("macros.asm");
     if (!output.is_open()) {
-        throw std::runtime_error("Error: failed to open 'macros.asm'");
+        throw std::ios_base::failure("Error: failed to open 'macros.asm'");
     }
 
-    output  << macros_asm;
+    output << macros_asm;
 }
 
-void deleteMacroFile() {
-    std::string command = "rm -f macros.asm";
-    if (std::system(command.c_str()) != 0) {
-        throw std::runtime_error("Error: failed to delete 'macros.asm'");
+int deleteMacroFile() {
+    if (std::string command = "rm -f macros.asm"; std::system(command.c_str()) != 0) {
+        std::cerr << "Warning: failed to delete 'macros.asm'" << std::endl;
+        return 1;
     }
+
+    return 0;
 }
 
-std::ofstream createOutputFile(const std::string &filename, const std::set<std::string> &externs) {
-    std::ofstream output(filename + ".asm");
-    if (!output.is_open()) {
-        throw std::runtime_error("Error: failed to open '" + filename + ".asm'");
+std::ofstream createStartAsm() {
+    std::ofstream start_asm("start.asm");
+    if (!start_asm.is_open()) {
+        throw std::ios_base::failure("Error: failed to open 'start.asm'");
     }
 
     // Template for the start of the assembly file
-    output  << "%include \"macros.asm\"\n";
-    for (const std::string &extern_name : externs) {
-        output << "extern " << extern_name << "\n";
-    }
-    output  << "extern EXIT_SUCCESS\n"
-            << "section .text\n"
+    start_asm  << "%include \"macros.asm\"\n";
+    start_asm << R"(
+extern decreaseIndex
+extern increaseIndex
+extern printData
+extern readData
+extern EXIT_SUCCESS
+extern dataArr, dataIndex
+)";
+    start_asm  << "section .text\n"
             << "global _start\n"
             << "_start:\n";
 
-    return output;
+    return start_asm;
 }
 
-void createExecutable(const std::string &filename) {
+int createExecutable(const std::string &filename) {
     createMacroFile();
-    std::string command = "nasm -f elf64 " + filename + ".asm -o " + filename + ".o";
+    std::string command = "nasm -f elf64 -o start.o start.asm ";
     if (std::system(command.c_str()) != 0) {
-        throw std::runtime_error("Error: failed to assemble '" + filename + ".asm'");
+        std::cerr << "Error: failed produce 'start.o'" << std::endl;
+        return 1;
     }
-    deleteMacroFile();
+    int ret = deleteMacroFile();
 
     recreateAsmObjectFiles();
 
-    command = "ld -s -o " + filename + " " + filename + ".o";
-
+    command = "ld -s -o " + filename + " start.o";
     for (const std::string &asmObject : asmObjects) {
         command += " " + asmObject + ".o";
     }
-
     if (std::system(command.c_str()) != 0) {
-        throw std::runtime_error("Error: failed to link '" + filename + "'");
+        deleteFiles();
+        std::cerr << "Error: failed to link '" + filename + "'" << std::endl;
+        return 1;
     }
 
-    deleteFiles(filename);
+    ret = deleteFiles() != 0 ? 1 : ret;
+    return ret;
 }
 
 } // bf_compiler

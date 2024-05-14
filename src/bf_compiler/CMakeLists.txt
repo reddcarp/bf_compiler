@@ -8,14 +8,10 @@ set(bf_compiler_INCLUDE_DIRS
 )
 set(bf_compiler_SRC_FILES
     ${bf_compiler_SRC_DIR}/main.cpp
-    ${bf_compiler_SRC_DIR}/token.cpp
-    ${bf_compiler_SRC_DIR}/tokenize.cpp
     ${bf_compiler_SRC_DIR}/filegen.cpp
 )
 
 set(bf_compiler_HEADER_FILES
-    ${bf_compiler_INCLUDE_DIRS}/token.hpp
-    ${bf_compiler_INCLUDE_DIRS}/tokenize.hpp
     ${bf_compiler_INCLUDE_DIRS}/filegen.hpp
 )
 
