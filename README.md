@@ -1,6 +1,18 @@
-# bf_compiler
+<p align="center">
+  <img src="screenshots/Icon.png" width="200">
+</p>
 
-A [brainfck](https://en.wikipedia.org/wiki/Brainfuck) language compiler for linux x86_64 intel architecture, written in C++.
+<h1 align="center">BF compiler</h1>
+
+<p align="center">
+  <strong>A <a href="https://en.wikipedia.org/wiki/Brainfuck">brainfck</a> language compiler for linux x86_64 intel architecture, written in C++.</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/language-cpp-orange.svg" alt="Language">
+  <img src="https://img.shields.io/badge/platform-BF-blue.svg" alt="Platform">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+</p>
 
 ## Compilation
 
@@ -49,7 +61,7 @@ make run_tests
 In src/asm, change the content of the start.asm file and run ./build.sh.
 It will create the executable without symbol stripping. Perfect to try the behavior of the base asm code and understand it more.
 
-ps: all the lines of asm code are commented and explaining their purpose.
+> Note: all the lines of asm code are commented to explain their purpose.
 
 ## Resources
 
